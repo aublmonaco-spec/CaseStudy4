@@ -25,3 +25,13 @@ joined_flights_airports <- joined_flights_airports %>%
 farthest_JFK <- farthest_JFK %>%
   rename(dest = faa,
          dest_name = name)
+
+farthest_airport <- farthest_JFK$dest_name
+sf_airports <- st_as_sf(airports, coords = c("lon", "lat"), crs = 4326)
+st_crs(sf_airports)
+
+JFK_airport <- filter(sf_airports, faa == "JFK")
+
+airport_map <- ggplot() + geom_sf(data = world) + geom_sf(data = sf_airports) + geom_sf(data = JFK_airport, aes(color = "red")) + geom_point(data = farthest_JFK, aes(x = lon, y = lat, color = "blue"))
+
+airport_map + coord_sf()
