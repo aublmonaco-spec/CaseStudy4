@@ -10,8 +10,18 @@ JFK_flights <- filter(flights, origin == "JFK")
 
 JFK_flights <- JFK_flights %>% arrange(desc(distance))
 
-farthest_JFK <- slice_head(JFK_flights)
-View(farthest_JFK)
-View(weather)
+JFK_flights <- JFK_flights %>%
+  rename(faa = dest)
 
-joined_flights_weather <- flights %>% left_join(weather)
+joined_flights_airports <- left_join(JFK_flights, airports)
+
+farthest_JFK <- slice_head(joined_flights_airports)
+View(farthest_JFK)
+
+joined_flights_airports <- joined_flights_airports %>%
+  rename(dest = faa) %>%
+  rename(dest_name = name)
+
+farthest_JFK <- farthest_JFK %>%
+  rename(dest = faa,
+         dest_name = name)
